@@ -1,0 +1,37 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[80vh]">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-8 font-sans">Sign up to Chadeo</h2>
+        
+        <form action="{% url 'chadeo:login' %}" method="post" class="flex flex-col gap-4">
+            {% csrf_token %}
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-semibold text-gray-600">Username</label>
+                <input type="text" name="username" required
+                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-800 transition">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-semibold text-gray-600">Email Address</label>
+                <input type="email" name="email" required
+                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-800 transition">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-sm font-semibold text-gray-600">Password</label>
+                <input type="password" name="password" required
+                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-800 transition">
+            </div>
+            <p class="text-center text-sm text-gray-500 mt-4">
+                Already have an account? <a href="{% url 'chadeo:login' %}" class="text-blue-800 hover:underline">Click here</a>
+            </p>
+            <button type="submit" 
+                class="mt-4 bg-blue-800 text-white font-bold py-2 rounded hover:bg-blue-900 transition-colors shadow-md">
+                Sign Up
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
