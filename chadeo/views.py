@@ -7,9 +7,15 @@ from django.contrib.auth import authenticate, login, logout
 
 @login_required(login_url="/chadeo/login")
 def index(request):
-    user = request.user
+
+    if request.method == "POST":
+        room_name = request.POST["room_name"]
+        return redirect('chadeo:chat_room', room_name=room_name)
     
-    return render(request, "chadeo/index.html",{"user": user})
+    else:
+        user = request.user
+        
+        return render(request, "chadeo/index.html",{"user": user})
 
 
 def create_user(request):
@@ -48,3 +54,7 @@ def logout_user(request):
     logout(request)
     print("logout success")
     return redirect('chadeo:login_user')
+
+@login_required(login_url="/chadeo/login")
+def chat_room(request, room_name):
+    return render(request, "chadeo/chat_room.html", {"room_name": room_name})

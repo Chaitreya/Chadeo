@@ -35,13 +35,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'chadeo.apps.ChadeoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chadeo.apps.ChadeoConfig'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'myProject.wsgi.application'
+# WSGI_APPLICATION = 'myProject.wsgi.application'
+ASGI_APPLICATION = 'myProject.asgi.application'
 
 
 # Database
@@ -84,6 +86,15 @@ DATABASES = {
         'USER': os.getenv("USER"),
         'PASSWORD': os.getenv("PASS")
         
+    }
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        }
     }
 }
 

@@ -1,6 +1,15 @@
 {% extends "./base.html" %}
 
 {% block content %}
-    <h2>Chat and Video Calls Made Easy</h2>
-    <p>This is the homepage content.</p>
+<div class="flex flex-col h-[calc(100vh-64px)] bg-gray-50">
+    
+    <form action="{% url 'chadeo:index' %}" method="post">
+        {% csrf_token %}
+        <label>Enter lobby name</label>
+        <input type="text" name="room_name">
+        <button type="submit">Submit</button>
+    </form>
+
+
+</div>
 {% endblock %}
