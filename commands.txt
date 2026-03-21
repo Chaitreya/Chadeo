@@ -1,0 +1,26 @@
+Creating cpp grpc files using signaling.proto
+
+(chadeoEnv) PS F:\Chadeo\media_worker> C:\Users\cbhel\vcpkg\installed\x64-windows\tools\protobuf\protoc.exe `
+>>     --proto_path=../protos `
+>>     --cpp_out=../rpc_gen `
+>>     --grpc_out=../rpc_gen `
+>>     --plugin=protoc-gen-grpc=C:\Users\cbhel\vcpkg\installed\x64-windows\tools\grpc\grpc_cpp_plugin.exe `
+>>     ../protos/signaling.proto
+
+Creating python grpc files using singling.proto
+(chadeoEnv) PS F:\Chadeo\chadeo> python -m grpc_tools.protoc `
+>>     --proto_path=../protos `
+>>     --python_out=../chadeo `
+>>     --grpc_python_out=../chadeo `
+>>     ../protos/signaling.proto
+
+Creating media_worker.exe using main.cpp file and CMakeFiles.txt
+(chadeoEnv) PS F:\Chadeo\media_worker\build> cmake .. -DCMAKE_TOOLCHAIN_FILE="C:/Users/cbhel/vcpkg/scripts/buildsystems/vcpkg.cmake"
+>>
+>> # Actually compile the .exe
+>> cmake --build .
+
+https://www.youtube.com/watch?v=u7siCTdGhuw&list=PL5E1F5cTSTtRSP3Qb8-gZ-Hm5AXp3VKvu
+
+docker run -d --name redis -p 6379:6379 redis
+

@@ -1,0 +1,11 @@
+# Ignore the build directory
+build/
+
+# Ignore generated gRPC files
+rpc_gen/
+
+# Ignore Visual Studio user-specific files
+.vs/
+*.user
+*.sln
+*.vcxproj
