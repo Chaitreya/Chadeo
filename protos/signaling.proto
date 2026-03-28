@@ -2,10 +2,13 @@ syntax = "proto3";
 
 package signaling;
 
-// The "Verb": The actions Django can ask C++ to perform
+// The service definition
 service MediaSignaling {
-    // Django sends a request to start a session, C++ sends back the WebRTC answer
-    rpc InitiateCall(CallRequest) returns (CallResponse);
+    // Starts the webcam and signaling
+    rpc InitiateCall (CallRequest) returns (CallResponse) {}
+
+    // Stops the webcam and cleans up resources
+    rpc EndCall (CallRequest) returns (CallResponse) {}
 }
 
 // The "Nouns": The data structures being passed around

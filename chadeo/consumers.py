@@ -20,11 +20,8 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
 
-        # 2. ACKNOWLEDGEMENT: Tell C++ that someone joined
-        self.send_presence_to_cpp()
 
-
-    def send_presence_to_cpp(self):
+    def conect_and_start_video_call(self):
         """Sends a 'Hello' to the C++ Worker immediately on connection"""
         try:
             with grpc.insecure_channel('localhost:50051') as channel:
@@ -41,8 +38,27 @@ class ChatConsumer(WebsocketConsumer):
                 response = stub.InitiateCall(request)
                 
                 if response.success:
-                    print(f"✅ C++ Ack: {self.room_name} is now active in the worker.")
-                    print(response.sdp_answer)
+                    print(f"✅ C++ Ack: {self.room_name} is now active with video call for user {self.scope["user"].username}")
+        except grpc.RpcError as e:
+            print(f"⚠️ C++ Worker not reachable: {e.code()}")
+
+    def end_video_call(self):
+        try:
+            with grpc.insecure_channel('localhost:50051') as channel:
+                stub = signaling_pb2__grpc.MediaSignalingStub(channel)
+                
+                # We send a dummy/initial SDP just to satisfy the .proto contract
+                request = signaling__pb2.CallRequest(
+                    room_id=self.room_name,
+                    user_id=self.scope["user"].username,
+                    sdp_offer="INIT_CONNECTION" 
+                )
+
+                # The actual call
+                response = stub.EndCall(request)
+                
+                if response.success:
+                    print(f"✅ C++ Ack: user {self.scope["user"].username} of {self.room_name}  has stopped video call.")
         except grpc.RpcError as e:
             print(f"⚠️ C++ Worker not reachable: {e.code()}")
 
@@ -53,17 +69,26 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data ):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
         user = self.scope["user"]
 
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, 
-            {
-                "type": "chat.message",
-                "message": message,
-                "username": user.username
-            }
-        )
+        if "action" in text_data_json:
+            if text_data_json["action"] == "start_video_call":
+                # Start video call
+                self.conect_and_start_video_call()
+
+            else:
+                self.end_video_call()
+        else:
+            message = text_data_json["message"]
+
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name, 
+                {
+                    "type": "chat.message",
+                    "message": message,
+                    "username": user.username
+                }
+            )
 
     def chat_message(self,event):
         message = event["message"]

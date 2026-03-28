@@ -22,6 +22,14 @@
                 Send
             </button>
         </form>
+        <button type="button" ws-send hx-vals='{"action": "start_video_call"}'
+        class="bg-blue-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-900 transition shadow-md">
+            Video Call
+        </button>
+        <button type="button" ws-send hx-vals='{"action": "end_video_call"}'
+        class="bg-red-800 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-900 transition shadow-md">
+            End Call
+        </button>
     </div>
 
 </div>
